@@ -7,7 +7,6 @@ def operators(filename):
 		csvreader = csv.reader(csvfile, delimiter='|')
 		for row in csvreader:
 			callsign = row[4]
-			fullname = unicode(row[7], '8859', "ignore")
 			firstname = unicode(row[8], '8859', "ignore")
 			lastname = unicode(row[10], '8859', "ignore")
 			address = unicode(row[15], '8859', "ignore")
@@ -33,6 +32,8 @@ c.execute('''CREATE TABLE IF NOT EXISTS operators
 	state TEXT,
 	zip INT)''')
 
+c.executemany("INSERT INTO operators VALUES(?,?,?,?,?,?,?)", operators('tests/carlos.dat') )
+c.executemany("INSERT INTO operators VALUES(?,?,?,?,?,?,?)", operators('tests/jorg.dat') )
 c.executemany("INSERT INTO operators VALUES(?,?,?,?,?,?,?)", operators('EN.dat') )
 
 c.execute("commit")
