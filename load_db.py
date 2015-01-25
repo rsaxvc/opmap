@@ -10,11 +10,11 @@ def operators(filename):
 			firstname = row[8]
 			middleinitial = row[9]
 			lastname = row[10]
-			address = row[15]
+			address = unicode(row[15], 'utf-8')
 			city = row[16]
 			state = row[17]
 			zip = row[18]
-			print zip
+			print firstname,lastname
 			yield(callsign,firstname,lastname,address,city,state,zip)
 
 import sqlite3
