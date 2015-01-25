@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import csv
 
 # a generator that extracts relevant fields from a pipe-separated ULS EN.dat file
