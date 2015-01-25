@@ -10,7 +10,7 @@ def operators(filename):
 			firstname = row[8]
 			middleinitial = row[9]
 			lastname = row[10]
-			address = unicode(row[15], '1252', "ignore")
+			address = unicode(row[15], '8859', "ignore")
 			city = row[16]
 			state = row[17]
 			zip = row[18]
@@ -33,6 +33,6 @@ c.execute('''CREATE TABLE IF NOT EXISTS operators
 	state TEXT,
 	zip INT)''')
 
-c.executemany("INSERT INTO operators VALUES(?,?,?,?,?,?,?)", operators('EN.dat') )
+c.executemany("INSERT INTO operators VALUES(?,?,?,?,?,?,?)", operators('tests/jorg.dat') )
 
 c.execute("commit")
