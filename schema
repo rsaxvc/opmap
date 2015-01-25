@@ -1,0 +1,11 @@
+DBName|?|?|?|Callsign|?|LNumber?|FullName|FirstName|MiddleInitial|LastName|||||Address|City|StateCode|ZIP|?|?|?|?|?|?|?|
+
+Callsign(4)
+FirstName(8)
+LastName(10)
+Address(15)
+City(16)
+State(17)
+Zip(18)
+Latitude
+Longitude
