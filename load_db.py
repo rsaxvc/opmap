@@ -10,7 +10,7 @@ def operators(filename):
 			firstname = row[8]
 			middleinitial = row[9]
 			lastname = row[10]
-			address = unicode(row[15], 'utf-8')
+			address = unicode(row[15], '1252', "ignore")
 			city = row[16]
 			state = row[17]
 			zip = row[18]
