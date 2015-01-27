@@ -34,9 +34,11 @@ for row in rows:
 	try:
 		location = geolocator.geocode(full_address)
 	except exc.GeocoderQueryError:
-		break;
+		print "QueryError"
+		continue
 	except exc.GeocoderQuotaExceeded:
-		continue;
+		print "QuotaExceeded"
+		break
 	else:
 		if location:
 			c.execute("INSERT INTO operator_locations VALUES(?,?,?,?,?)", ( rowid, location.latitude, location.latitude, location.longitude, location.longitude ) )
