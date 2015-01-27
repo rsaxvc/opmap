@@ -21,7 +21,12 @@ from geopy.geocoders import GoogleV3
 from geopy import exc
 geolocator = GoogleV3()
 
-for row in c.execute('SELECT rowid,address,city,state,zip FROM operators WHERE rowid not in (SELECT rowid FROM operator_locations) AND city="OLATHE"'):
+
+c.execute('SELECT rowid,address,city,state,zip FROM operators WHERE rowid not in (SELECT rowid FROM operator_locations) AND state="KS"')
+
+rows = c.fetchmany(100)
+
+for row in rows:
 
 	full_address = " ".join( map(str, row[1:] ) )
 	rowid = row[0]
@@ -33,6 +38,7 @@ for row in c.execute('SELECT rowid,address,city,state,zip FROM operators WHERE r
 	except exc.GeocoderQuotaExceeded:
 		continue;
 	else:
-		c.execute("INSERT INTO operator_locations VALUES(?,?,?,?,?)", ( rowid, location.latitude, location.latitude, location.longitude, location.longitude ) )
+		if location:
+			c.execute("INSERT INTO operator_locations VALUES(?,?,?,?,?)", ( rowid, location.latitude, location.latitude, location.longitude, location.longitude ) )
 
 c.execute("commit")
