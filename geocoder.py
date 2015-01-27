@@ -17,16 +17,22 @@ c.execute('''CREATE VIRTUAL TABLE IF NOT EXISTS operator_locations
 	maxLon REAL)
 	''')
 
-for row in c.execute('SELECT rowid,address,city,state,zip FROM operators WHERE rowid not in operator_locations.rowid'):
-	print row["rowid"],row["address"],row["city"],row["state"],row["zip"]
-#	c.execute("INSERT INTO operator_locations VALUES(?,?,?,?,?)", rowid, lat, lat, lon, lon )
+from geopy.geocoders import GoogleV3
+from geopy import exc
+geolocator = GoogleV3()
 
+for row in c.execute('SELECT rowid,address,city,state,zip FROM operators WHERE rowid not in (SELECT rowid FROM operator_locations) AND city="OLATHE"'):
 
+	full_address = " ".join( map(str, row[1:] ) )
+	rowid = row[0]
+
+	try:
+		location = geolocator.geocode(full_address)
+	except exc.GeocoderQueryError:
+		break;
+	except exc.GeocoderQuotaExceeded:
+		continue;
+	else:
+		c.execute("INSERT INTO operator_locations VALUES(?,?,?,?,?)", ( rowid, location.latitude, location.latitude, location.longitude, location.longitude ) )
 
 c.execute("commit")
-from geopy.geocoders import GoogleV3
-geolocator = GoogleV3()
-location = geolocator.geocode("5022 LANSDOWNE AVE SAINT LOUIS MO 63109")
-print(location.address)
-print((location.latitude, location.longitude))
-print(location.raw)
