@@ -16,7 +16,7 @@ class list_operators:
 
 		conn = sqlite3.connect('uls.db')
 		c = conn.cursor()
-		output = '[';
+		output = '[\n';
 		rowcnt = 0
 		for row in c.execute('''
 			SELECT
@@ -36,7 +36,7 @@ class list_operators:
 			''', ( bbox.minLat, bbox.maxLat, bbox.minLon, bbox.maxLon ) ):
 			if( rowcnt > 0 ):
 				output += ','
-			output += '{"callsign":"' + row[0] + '","id":' + str(row[1]) + ',"lat":' + str(row[2]) + ',"lon":' + str(row[3]) + '}'
+			output += '{"callsign":"' + row[0] + '","id":' + str(row[1]) + ',"lat":' + str(row[2]) + ',"lon":' + str(row[3]) + '}\n'
 			rowcnt += 1
 		output += ']';
 		return output
