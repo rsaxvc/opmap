@@ -44,27 +44,29 @@
     }
 
     $(document).ready(function(){
+
+      function updatePoints(e) {
+        var bounds = map.getBounds();
+        if (map.getBounds() === undefined) {
+          alert("undefBBox");
+        } else {
+          var sw = bounds.getSouthWest();
+          var ne = bounds.getNorthEast();
+          var query = 'http://home.rsaxvc.net:8080/operators?minLat=' + sw.lat() + '&minLon=' + sw.lng() + '&maxLon=' + ne.lng() + '&maxLat=' + ne.lat();
+          var xhr = $.getJSON(query);
+          xhr.done(loadResults);
+        }
+      }
+
       map = new GMaps({
         div: '#map',
         lat: 38.9,
         lng: -94.7,
-        dragend: function(e) {
-          var bounds = map.getBounds();
-          if (map.getBounds() === undefined) {
-            alert("undefBBox");
-          } else {
-            var sw = bounds.getSouthWest();
-            var ne = bounds.getNorthEast();
-            var query = 'http://home.rsaxvc.net:8080/operators?minLat=' + sw.lat() + '&minLon=' + sw.lng() + '&maxLon=' + ne.lng() + '&maxLat=' + ne.lat();
-            var xhr = $.getJSON(query);
-            xhr.done(loadResults);
-          }
+        idle: function(e) {
+          updatePoints(e);
         }
-
       });
 
-      var xhr = $.getJSON('http://home.rsaxvc.net:8080/operators?minLat=38.8&minLon=-94.8&maxLon=-94.6&maxLat=39');
-      xhr.done(loadResults);
     });
 
   </script>
