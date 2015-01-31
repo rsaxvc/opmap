@@ -1,5 +1,6 @@
 #!/usr/bin/python
 import sqlite3
+import time
 
 conn = sqlite3.connect('uls.db')
 conn.isolation_level = None
@@ -32,6 +33,7 @@ for row in rows:
 	rowid = row[0]
 
 	try:
+		time.sleep(.5)
 		location = geolocator.geocode(full_address)
 	except exc.GeocoderQueryError:
 		print "QueryError"
