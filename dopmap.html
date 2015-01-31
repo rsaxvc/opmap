@@ -44,6 +44,7 @@
     }
 
     $(document).ready(function(){
+
       function updatePoints(e) {
         var bounds = map.getBounds();
         if (map.getBounds() === undefined) {
@@ -56,21 +57,16 @@
           xhr.done(loadResults);
         }
       }
+
       map = new GMaps({
         div: '#map',
         lat: 38.9,
         lng: -94.7,
-        panend: function(e) {
-          update(e)
+        idle: function(e) {
+          updatePoints(e);
         }
-        dragend: function(e) {
-          update(e)
-        }
-
       });
 
-      var xhr = $.getJSON('http://home.rsaxvc.net:8080/operators?minLat=38.8&minLon=-94.8&maxLon=-94.6&maxLat=39');
-      xhr.done(loadResults);
     });
 
   </script>
