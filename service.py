@@ -10,8 +10,13 @@ urls = (
 
 app = web.application(urls, globals())
 
+
+
 class list_operators:
 	def GET(self):
+		web.header('Content-Type', 'application/json')
+		web.header('Access-Control-Allow-Origin', '*')
+
 		bbox = web.input(minLat = -90, minLon = -180, maxLat = 90, maxLon = 90)
 
 		conn = sqlite3.connect('uls.db')
