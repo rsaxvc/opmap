@@ -1,0 +1,4 @@
+Stabilize database format
+Use foreign keys
+Scrape everything else from ULS
+Refactor into python lib and separate services
