@@ -19,12 +19,14 @@
     function loadResults (items) {
       var items, markers_data = [];
       if (items.length > 0) {
+        var pathname = window.location.pathname;
+        var path = pathname.substring(0, pathname.lastIndexOf('/'));
+        var icon = 'http://' + window.location.hostname + path + '/radioicon.png';
 
         for (var i = 0; i < items.length; i++) {
           var item = items[i];
 
           if (item.lat != undefined && item.lon != undefined) {
-            var icon = 'https://foursquare.com/img/categories/food/default.png';
             
             markers_data.push({
               lat : item.lat,
