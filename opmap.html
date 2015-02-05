@@ -18,25 +18,31 @@
 
     function loadResults (items) {
       var items, markers_data = [];
-      if (items.length > 0) {
-        var pathname = window.location.pathname;
-        var path = pathname.substring(0, pathname.lastIndexOf('/'));
-        var icon = 'http://' + window.location.hostname + path + '/radioicon.png';
+      if (items.operators != undefined ) {
+        //alert(items.queryTime);
 
-        for (var i = 0; i < items.length; i++) {
-          var item = items[i];
+        items = items.operators;
 
-          if (item.lat != undefined && item.lon != undefined) {
+        if (items.length > 0) {
+          var pathname = window.location.pathname;
+          var path = pathname.substring(0, pathname.lastIndexOf('/'));
+          var icon = 'http://' + window.location.hostname + path + '/radioicon.png';
+
+          for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+
+            if (item.lat != undefined && item.lon != undefined) {
             
-            markers_data.push({
-              lat : item.lat,
-              lng : item.lon,
-              title : item.callsign,
-              icon : {
-                size : new google.maps.Size(32, 32),
-                url : icon
-              }
-            });
+              markers_data.push({
+                lat : item.lat,
+                lng : item.lon,
+                title : item.callsign,
+                icon : {
+                  size : new google.maps.Size(32, 32),
+                  url : icon
+                }
+              });
+            }
           }
         }
       }

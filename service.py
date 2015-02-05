@@ -2,7 +2,7 @@
 
 import web
 import sqlite3
-
+import time
 
 urls = (
 	'/operators', 'list_operators'
@@ -19,9 +19,10 @@ class list_operators:
 
 		bbox = web.input(minLat = -90, minLon = -180, maxLat = 90, maxLon = 90)
 
+		queryStart = time.time()
 		conn = sqlite3.connect('uls.db')
 		c = conn.cursor()
-		output = '[\n';
+		output = '{"operators":[\n'
 		rowcnt = 0
 		for row in c.execute('''
 			SELECT
@@ -43,7 +44,9 @@ class list_operators:
 				output += ','
 			output += '{"callsign":"' + row[0] + '","id":' + str(row[1]) + ',"lat":' + str(row[2]) + ',"lon":' + str(row[3]) + '}\n'
 			rowcnt += 1
-		output += ']';
+		output += '],"queryTime":'
+		output += str( time.time() - queryStart )
+		output += '}'
 		return output
 
 if __name__ == "__main__":
