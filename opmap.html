@@ -52,7 +52,7 @@
         } else {
           var sw = bounds.getSouthWest();
           var ne = bounds.getNorthEast();
-          var query = 'http://home.rsaxvc.net:8080/operators?minLat=' + sw.lat() + '&minLon=' + sw.lng() + '&maxLon=' + ne.lng() + '&maxLat=' + ne.lat();
+          var query = 'http://' + window.location.hostname + ':8080/operators?minLat=' + sw.lat() + '&minLon=' + sw.lng() + '&maxLon=' + ne.lng() + '&maxLat=' + ne.lat();
           var xhr = $.getJSON(query);
           xhr.done(loadResults);
         }
