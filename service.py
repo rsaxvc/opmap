@@ -39,6 +39,11 @@ class list_operators:
 		queryStart = time.time()
 		conn = sqlite3.connect('uls.db')
 		c = conn.cursor()
+
+		c.execute('PRAGMA mmap_size=' + str(1024*1024*256) + ';' )
+		c.execute('PRAGMA cache_size=-' + str(1024*256) +';' )
+		c.execute('PRAGMA query_only=1;' )
+
 		output = '{"operators":[\n'
 		first = True
 		for y in xrange( tiling.tileLat ):
