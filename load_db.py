@@ -34,4 +34,14 @@ c.execute('''CREATE TABLE IF NOT EXISTS operators
 
 c.executemany("INSERT INTO operators VALUES(?,?,?,?,?,?,?)", operators('EN.dat') )
 
+c.execute('''CREATE INDEX IF NOT EXISTS operator_state_city
+    ON
+    operators
+    (
+    state,
+    city
+    )
+    ''')
+
+
 c.execute("commit")
