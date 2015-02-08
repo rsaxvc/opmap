@@ -28,7 +28,7 @@ from geopy.geocoders import GoogleV3
 from geopy import exc
 geolocator = GoogleV3()
 
-c.execute('SELECT rowid,address,city,state,zip FROM operators WHERE rowid not in (SELECT rowid FROM operator_locations) AND state="KS"')
+c.execute('SELECT rowid,address,city,state,zip FROM operators WHERE rowid not in (SELECT rowid FROM operator_locations) AND state="PA"')
 
 rows = c.fetchmany(2600)
 try:
@@ -46,7 +46,8 @@ try:
 		else:
 			if location:
 				c.execute("INSERT INTO operator_locations VALUES(?,?,?,?,?)", ( rowid, location.latitude, location.latitude, location.longitude, location.longitude ) )
-
+except KeyboardInterrupt:
+	print( "KeyboardInterrupt Detected. Commiting partial progress" )
 except Exception as e:
 	error( e.__doc__ )
 	error( e.message )
