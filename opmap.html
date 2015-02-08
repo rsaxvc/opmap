@@ -60,6 +60,10 @@
         } else {
           var sw = bounds.getSouthWest();
           var ne = bounds.getNorthEast();
+
+          var tileLat = Math.round( map.el.clientHeight / 16 )
+          var tileLon = Math.round( map.el.clientWidth / 12 )
+
           var query = 'http://'
             + window.location.hostname
             + ':8080/operators?minLat='
@@ -73,9 +77,9 @@
             + '&tileDensity='
             + 1
             + '&tileLat='
-            + 50
+            + tileLat
             + '&tileLon='
-            + 80;
+            + tileLon;
           var xhr = $.getJSON(query);
           xhr.done(loadResults);
         }
