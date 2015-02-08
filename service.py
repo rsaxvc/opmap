@@ -11,8 +11,6 @@ urls = (
 
 app = web.application(urls, globals())
 
-
-
 class list_operators:
 	def GET(self):
 		web.header('Content-Type', 'application/json')
@@ -38,11 +36,13 @@ class list_operators:
 
 		queryStart = time.time()
 		conn = sqlite3.connect('uls.db')
+		conn.isolation_level = None
 		c = conn.cursor()
 
 		c.execute('PRAGMA mmap_size=' + str(1024*1024*256) + ';' )
 		c.execute('PRAGMA cache_size=-' + str(1024*256) +';' )
 		c.execute('PRAGMA query_only=1;' )
+		c.execute('BEGIN')
 
 		output = '{"operators":[\n'
 		first = True
@@ -76,6 +76,7 @@ class list_operators:
 					output += '{"callsign":"' + row[0] + '","id":' + str(row[1]) + ',"lat":' + str(row[2]) + ',"lon":' + str(row[3]) + '}\n'
 					first = False
 
+		c.execute('COMMIT')
 		output += '],"queryTime":'
 		output += str( time.time() - queryStart )
 		output += '}'
