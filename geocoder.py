@@ -30,7 +30,7 @@ geolocator = GoogleV3()
 
 c.execute('SELECT rowid,address,city,state,zip FROM operators WHERE rowid not in (SELECT rowid FROM operator_locations) AND state="PA"')
 
-rows = c.fetchmany(2600)
+rows = c.fetchmany(2000)
 try:
 	for row in rows:
 
