@@ -13,8 +13,9 @@ app = web.application(urls, globals())
 
 class list_operators:
 	def GET(self):
-		web.header('Content-Type', 'application/json')
 		web.header('Access-Control-Allow-Origin', '*')
+		web.header('Content-Type', 'application/json')
+		web.header('Transfer-Encoding', 'chunked')
 
 		bbox = web.input(minLat = -90, minLon = -180, maxLat = 90, maxLon = 90)
 		tiling = web.input(tileLat = 1, tileLon = 1, tileDensity = sys.maxint )
@@ -48,7 +49,7 @@ class list_operators:
 		c.execute('PRAGMA query_only=1;' )
 		c.execute('BEGIN')
 
-		output = '{"operators":[\n'
+		yield '{"operators":['
 		first = True
 		for y in xrange( tiling.tileLat ):
 			for x in xrange( tiling.tileLon ):
@@ -76,15 +77,12 @@ class list_operators:
 						?
 					''', ( bbox.minLat, bbox.maxLat, bbox.minLon, bbox.maxLon, tiling.tileDensity ) ):
 					if( first == False ):
-						output += ','
-					output += '{"callsign":"' + row[0] + '","id":' + str(row[1]) + ',"lat":' + str(row[2]) + ',"lon":' + str(row[3]) + '}\n'
+						yield ','
+					yield '{"callsign":"' + row[0] + '","id":' + str(row[1]) + ',"lat":' + str(row[2]) + ',"lon":' + str(row[3]) + '}\n'
 					first = False
 
 		c.execute('COMMIT')
-		output += '],"queryTime":'
-		output += str( time.time() - queryStart )
-		output += '}'
-		return output
+		yield '],"queryTime":' + str( time.time() - queryStart ) + '\n}'
 
 if __name__ == "__main__":
     app.run()
