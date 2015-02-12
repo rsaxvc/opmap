@@ -42,6 +42,7 @@ class list_operators:
 		queryStart = time.time()
 		conn = sqlite3.connect('uls.db')
 		conn.isolation_level = None
+		conn.row_factory = sqlite3.Row
 		c = conn.cursor()
 
 		c.execute('PRAGMA mmap_size=' + str(1024*1024*256) + ';' )
@@ -60,7 +61,7 @@ class list_operators:
 
 				for row in c.execute('''
 					SELECT
-						callsign,rowid,minLat,minLon
+						callsign,fname,lname,address,city,state,zip,rowid,minLat,minLon
 					FROM
 						operator_locations,operators
 					WHERE
@@ -78,7 +79,27 @@ class list_operators:
 					''', ( bbox.minLat, bbox.maxLat, bbox.minLon, bbox.maxLon, tiling.tileDensity ) ):
 					if( first == False ):
 						yield ','
-					yield '{"callsign":"' + row[0] + '","id":' + str(row[1]) + ',"lat":' + str(row[2]) + ',"lon":' + str(row[3]) + '}\n'
+					yield ('{' +
+						'"callsign":"' + row["callsign"]    + '"' +
+							',' +
+						'"id":'        + str(row["rowid"])  +
+							',' +
+						'"firstName":"'+ row["fname"]       + '"' +
+							',' +
+						'"lastName":"' + row["lname"]       + '"' +
+							',' +
+						'"address":"'  + row["address"]     + '"' +
+							',' +
+						'"city":"'     + row["city"]        + '"' +
+							',' +
+						'"state":"'    + row["state"]       + '"' +
+							',' +
+						'"zip":'       + str(row["zip"])    +
+							',' +
+						'"lat":'       + str(row["minLat"]) +
+							',' +
+						'"lon":'       + str(row["minLon"]) +
+						'}\n')
 					first = False
 
 		c.execute('COMMIT')
