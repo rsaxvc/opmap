@@ -40,7 +40,18 @@
                 icon : {
                   size : new google.maps.Size(32, 32),
                   url : icon
-                }
+                },
+                infoWindow : {
+                  content : '<p>' +
+                    item.firstName + ' ' +
+                    item.lastName + ' - ' +
+                    item.callsign + '<br/>' +
+                    item.address + '<br/>' +
+                    item.city + ', ' +
+                    item.state + ' ' +
+                    item.zip +
+                    '</p>'
+                  }
               });
             }
           }
