@@ -4,15 +4,30 @@ import web
 import sqlite3
 import time
 import sys
+import threading
 
 urls = (
 	'/operators', 'list_operators'
 )
 
 app = web.application(urls, globals())
+running = False
+
+condition = threading.Condition()
 
 class list_operators:
 	def GET(self):
+		global running
+
+		condition.acquire()
+		while( running ):
+			condition.wait() # sleep until item becomes available
+		running = True
+		condition.notify()
+		condition.release()
+
+		print("Starting")
+
 		web.header('Access-Control-Allow-Origin', '*')
 		web.header('Content-Type', 'application/json')
 		web.header('Transfer-Encoding', 'chunked')
@@ -104,6 +119,13 @@ class list_operators:
 
 		c.execute('COMMIT')
 		yield '],"queryTime":' + str( time.time() - queryStart ) + '\n}'
+
+		print("Done")
+
+		condition.acquire()
+		running = False
+		condition.notify()
+		condition.release()
 
 if __name__ == "__main__":
     app.run()
