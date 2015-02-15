@@ -50,7 +50,8 @@ class list_operators:
 		c.execute('PRAGMA query_only=1;' )
 		c.execute('BEGIN')
 
-		yield '{"operators":['
+		retn = []
+		retn.append( '{"operators":[' )
 		first = True
 		for y in xrange( tiling.tileLat ):
 			minLat = baseLat + deltaLat * y
@@ -78,10 +79,9 @@ class list_operators:
 						?
 					''', ( minLat, maxLat, minLon, maxLon, tiling.tileDensity ) ):
 
-					line = []
 					if( first == False ):
-						line.append(',')
-					line += (
+						retn.append(',')
+					retn += (
 						'{"callsign":"',     row["callsign"], '",',
 						'"id":'        , str(row["rowid"])  ,  ',',
 						'"firstName":"',     row["fname"]   , '",',
@@ -93,11 +93,11 @@ class list_operators:
 						'"lat":'       , str(row["minLat"]) ,  ',',
 						'"lon":'       , str(row["minLon"]) , '}\n' )
 
-					yield( ''.join(line) )
 					first = False
 
 		c.execute('COMMIT')
-		yield '],"queryTime":' + str( time.time() - queryStart ) + '\n}'
+		retn.append( '],"queryTime":' + str( time.time() - queryStart ) + '\n}' )
+		return( ''.join(retn) )
 
 if __name__ == "__main__":
     app.run()
