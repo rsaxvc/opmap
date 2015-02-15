@@ -4,6 +4,7 @@ import web
 import sqlite3
 import time
 import sys
+import ujson
 
 urls = (
 	'/operators', 'list_operators'
@@ -50,9 +51,9 @@ class list_operators:
 		c.execute('PRAGMA query_only=1;' )
 		c.execute('BEGIN')
 
-		retn = []
-		retn.append( '{"operators":[' )
+		yield '{"operators":'
 		first = True
+		operators = []
 		for y in xrange( tiling.tileLat ):
 			minLat = baseLat + deltaLat * y
 			maxLat = baseLat + deltaLat * ( y + 1 )
@@ -79,25 +80,25 @@ class list_operators:
 						?
 					''', ( minLat, maxLat, minLon, maxLon, tiling.tileDensity ) ):
 
-					if( first == False ):
-						retn.append(',')
-					retn += (
-						'{"callsign":"',     row["callsign"], '",',
-						'"id":'        , str(row["rowid"])  ,  ',',
-						'"firstName":"',     row["fname"]   , '",',
-						'"lastName":"' ,     row["lname"]   , '",',
-						'"address":"'  ,     row["address"] , '",',
-						'"city":"'     ,     row["city"]    , '",',
-						'"state":"'    ,     row["state"]   , '",',
-						'"zip":'       , str(row["zip"])    ,  ',',
-						'"lat":'       , str(row["minLat"]) ,  ',',
-						'"lon":'       , str(row["minLon"]) , '}\n' )
+					operator = {}
+					operator["id"] = row["rowid"]
+
+					operator["firstName"] = row["fname"]
+					operator["lastName"] = row["lname"]
+					operator["callsign"] = row["callsign"]
+					operator["address"] = row["address"]
+					operator["city"] = row["city"]
+					operator["state"] = row["state"]
+					operator["zip"] = row["zip"]
+					operator["lat"] = row["minLat"]
+					operator["lon"] = row["minLon"]
+					operators.append(operator)
 
 					first = False
 
 		c.execute('COMMIT')
-		retn.append( '],"queryTime":' + str( time.time() - queryStart ) + '\n}' )
-		return( ''.join(retn) )
+		yield( ujson.dumps(operators) )
+		yield ',"queryTime":' + str( time.time() - queryStart ) + '\n}'
 
 if __name__ == "__main__":
     app.run()
