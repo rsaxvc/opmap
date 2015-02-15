@@ -77,29 +77,23 @@ class list_operators:
 					LIMIT
 						?
 					''', ( minLat, maxLat, minLon, maxLon, tiling.tileDensity ) ):
+
+					line = []
 					if( first == False ):
-						yield ','
-					yield ('{' +
-						'"callsign":"' + row["callsign"]    + '"' +
-							',' +
-						'"id":'        + str(row["rowid"])  +
-							',' +
-						'"firstName":"'+ row["fname"]       + '"' +
-							',' +
-						'"lastName":"' + row["lname"]       + '"' +
-							',' +
-						'"address":"'  + row["address"]     + '"' +
-							',' +
-						'"city":"'     + row["city"]        + '"' +
-							',' +
-						'"state":"'    + row["state"]       + '"' +
-							',' +
-						'"zip":'       + str(row["zip"])    +
-							',' +
-						'"lat":'       + str(row["minLat"]) +
-							',' +
-						'"lon":'       + str(row["minLon"]) +
-						'}\n')
+						line.append(',')
+					line += (
+						'{"callsign":"',     row["callsign"], '",',
+						'"id":'        , str(row["rowid"])  ,  ',',
+						'"firstName":"',     row["fname"]   , '",',
+						'"lastName":"' ,     row["lname"]   , '",',
+						'"address":"'  ,     row["address"] , '",',
+						'"city":"'     ,     row["city"]    , '",',
+						'"state":"'    ,     row["state"]   , '",',
+						'"zip":'       , str(row["zip"])    ,  ',',
+						'"lat":'       , str(row["minLat"]) ,  ',',
+						'"lon":'       , str(row["minLon"]) , '}\n' )
+
+					yield( ''.join(line) )
 					first = False
 
 		c.execute('COMMIT')
