@@ -53,11 +53,11 @@ class list_operators:
 		yield '{"operators":['
 		first = True
 		for y in xrange( tiling.tileLat ):
+			minLat = baseLat + deltaLat * y
+			maxLat = baseLat + deltaLat * ( y + 1 )
 			for x in xrange( tiling.tileLon ):
-				bbox.minLat = baseLat + deltaLat * y
-				bbox.minLon = baseLon + deltaLon * x
-				bbox.maxLat = baseLat + deltaLat * ( y + 1 )
-				bbox.maxLon = baseLon + deltaLon * ( x + 1 )
+				minLon = baseLon + deltaLon * x
+				maxLon = baseLon + deltaLon * ( x + 1 )
 
 				for row in c.execute('''
 					SELECT
@@ -76,7 +76,7 @@ class list_operators:
 						operator_locations.minLon < ?
 					LIMIT
 						?
-					''', ( bbox.minLat, bbox.maxLat, bbox.minLon, bbox.maxLon, tiling.tileDensity ) ):
+					''', ( minLat, maxLat, minLon, maxLon, tiling.tileDensity ) ):
 					if( first == False ):
 						yield ','
 					yield ('{' +
