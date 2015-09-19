@@ -25,13 +25,9 @@ class list_operators:
 		bbox.minLon = float( bbox.minLon )
 		bbox.maxLon = float( bbox.maxLon )
 
-		tiling.tileLat = int( tiling.tileLat )
-		tiling.tileLon = int( tiling.tileLon )
+		tiling.tileLat = max( int( tiling.tileLat ), 1 )
+		tiling.tileLon = max( int( tiling.tileLon ), 1 )
 		tiling.tileDensity = int( tiling.tileDensity )
-		if tiling.tileLat < 1:
-			tiling.tileLat = 1
-		if tiling.tileLon < 1:
-			tiling.tileLon = 1
 
 		#extract the important parts of bbox so we can chop it up
 		deltaLat = ( bbox.maxLat - bbox.minLat ) / tiling.tileLat
