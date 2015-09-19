@@ -38,7 +38,7 @@
                 lng : item.lon,
                 title : item.callsign,
                 icon : {
-                  size : new google.maps.Size(32, 32),
+                  size : new google.maps.Size(48, 64),
                   anchor : new google.maps.Point(16,16),
                   url : icon
                 },
@@ -73,8 +73,8 @@
           var sw = bounds.getSouthWest();
           var ne = bounds.getNorthEast();
 
-          var tileLat = Math.round( map.el.clientHeight / 16 )
-          var tileLon = Math.round( map.el.clientWidth / 12 )
+          var tileLat = Math.round( map.el.clientHeight / 48 )
+          var tileLon = Math.round( map.el.clientWidth / 32 )
 
           var query = 'http://'
             + window.location.hostname
